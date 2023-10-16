@@ -69,3 +69,6 @@
          *failed = 1'b0;
          \SV
          endmodule
+
+![Screenshot from 2023-10-16 22-40-20](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/c9f53fcc-133c-489f-bab0-240cafbbf59b)
+

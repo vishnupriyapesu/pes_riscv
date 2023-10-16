@@ -56,7 +56,7 @@
 
 **more examples using makerchip**
 
-**1) Inverter**
+**1) Inverter**<br />
 
 \TLV
    $reset = *reset;

@@ -49,5 +49,22 @@
 ![Screenshot from 2023-10-16 22-02-53](https://github.com/vishnupriyapesu/pes_class_asic/assets/142419649/28acbfa8-f231-4ead-ba77-b8dbe0a7d98d)
 
 
+</details>
+
 <details>
 <summary> Labs for combinational logic</summary>
+
+**more examples using makerchip**
+
+**1) Inverter**
+
+\TLV
+   $reset = *reset;
+   
+   $out = ! $in1;
+   
+   // Assert these to end simulation (before Makerchip cycle limit).
+   *passed = *cyc_cnt > 40;
+   *failed = 1'b0;
+\SV
+   endmodule

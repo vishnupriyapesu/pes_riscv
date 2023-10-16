@@ -56,15 +56,16 @@
 
 **more examples using makerchip**
 
-**1) Inverter**<br />
+**1) Inverter**
+<br />
 
-\TLV
-   $reset = *reset;
+     \TLV
+         $reset = *reset;
    
-   $out = ! $in1;
+         $out = ! $in1;
    
-   // Assert these to end simulation (before Makerchip cycle limit).
-   *passed = *cyc_cnt > 40;
-   *failed = 1'b0;
-\SV
-   endmodule
+         // Assert these to end simulation (before Makerchip cycle limit).
+         *passed = *cyc_cnt > 40;
+         *failed = 1'b0;
+         \SV
+         endmodule

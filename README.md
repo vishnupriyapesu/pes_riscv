@@ -4,7 +4,7 @@
 # Day-3 Digital Logic with TL-verilog and Maker chip
 
 <details>
- <summary>Introduction tO logic gates</summary>
+ <summary>Combination logic in TL-verilog using Makerchip</summary>
 
  
 **Logic gates**
@@ -29,10 +29,6 @@
 
 
 
-</details>
-<details>
-<summary> Basic Mux Implememtation And INtroduction To Makerchip </summary>
-
 **Mux**
 
 ![24](https://github.com/vishnupriyapesu/pes_class_asic/assets/142419649/be7aade1-8571-4a28-a89a-8d9b03b5f9cf)
@@ -48,11 +44,6 @@
 
 ![Screenshot from 2023-10-16 22-02-53](https://github.com/vishnupriyapesu/pes_class_asic/assets/142419649/28acbfa8-f231-4ead-ba77-b8dbe0a7d98d)
 
-
-</details>
-
-<details>
-<summary> Labs for combinational logic</summary>
 
 **more examples using makerchip**
 
@@ -150,3 +141,14 @@
 
  
 ![Screenshot from 2023-10-16 22-58-37](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/f22d4542-cd75-4be3-a621-7fd1d0647bfd)
+
+
+</details>
+
+
+
+<details>
+<summary>Sequential Logic</summary>
+
+
+

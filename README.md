@@ -80,14 +80,73 @@
 <br />
 
        \TLV
-   $reset = *reset;
+        $reset = *reset;
    
-   $out = $in1 | $in2;
+       $out = $in1 | $in2;
    
-   // Assert these to end simulation (before Makerchip cycle limit).
-   *passed = *cyc_cnt > 40;
-   *failed = 1'b0;
-\SV
-   endmodule
+       // Assert these to end simulation (before Makerchip cycle limit).
+       *passed = *cyc_cnt > 40;
+       *failed = 1'b0;
+       \SV
+       endmodule
+
+![Screenshot from 2023-10-16 22-50-38](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/61b96a18-5ea5-4f63-bcd7-9226d5982564)
 
 
+**3)Explicitly adding the only 4 bits of the inputs using +**
+
+<br />
+
+       \TLV
+          $reset = *reset;
+          
+          $out[4:0] = $in1[3:0] + $in2[3:0];
+          // Assert these to end simulation (before Makerchip cycle limit).
+          *passed = *cyc_cnt > 40;
+          *failed = 1'b0;
+       \SV
+          endmodule
+
+          
+
+
+![Screenshot from 2023-10-16 22-54-21](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/3da109b3-498b-4a4a-bd68-4c381a3af4e7)
+
+
+
+**4)Mux with 1-bit input**
+
+
+<br />
+       \TLV
+          $reset = *reset;
+          
+          $out = $sel ? $in1 : $in2;
+          // Assert these to end simulation (before Makerchip cycle limit).
+          *passed = *cyc_cnt > 40;
+          *failed = 1'b0;
+       \SV
+          endmodule
+
+![Screenshot from 2023-10-16 22-56-12](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/60013cc0-de22-483a-aef4-60e167a4fb38)
+
+
+
+**5)Mux with 8-bit inputs**
+
+<br />
+
+
+       \TLV
+          $reset = *reset;
+          
+          $out[7:0] = $sel ? $in1[7:0] : $in2[7:0];
+          // Assert these to end simulation (before Makerchip cycle limit).
+          *passed = *cyc_cnt > 40;
+          *failed = 1'b0;
+       \SV
+          endmodule
+
+
+ 
+![Screenshot from 2023-10-16 22-58-37](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/f22d4542-cd75-4be3-a621-7fd1d0647bfd)

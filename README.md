@@ -150,5 +150,105 @@
 <details>
 <summary>Sequential Logic</summary>
 
+**1)D flip flop**
+
+A D flip-flop, also known as a Data or Delay flip-flop, is a fundamental digital electronic circuit that stores a single binary bit of information. 
+It is a type of bistable multivibrator, which means it has two stable states.
+
+
+<br />
+       \TLV
+          $reset = *reset;
+          
+          $out = $reset ? 0 : $data_in;
+          
+          // Assert these to end simulation (before Makerchip cycle limit).
+          *passed = *cyc_cnt > 40;
+          *failed = 1'b0;
+       \SV
+          endmodule
+
+
+![Screenshot from 2023-10-16 23-40-55](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/056dc121-dd0d-4968-afcf-55345cee8f6a)
+
+
+
+**2)fibonacci series**
+
+
+ > The Fibonacci series is a sequence of numbers in which each number is the sum of the two preceding ones. It typically starts with 0 and 1. So, the Fibonacci series begins as follows:
+
+0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...
+
+
+
+<br />
+
+       \TLV
+          $reset = *reset;
+          
+          $num[31:0] = $reset ? 1 : (>>1$num + >>2$num);
+          
+          // Assert these to end simulation (before Makerchip cycle limit).
+          *passed = *cyc_cnt > 40;
+          *failed = 1'b0;
+
+
+![Screenshot from 2023-10-16 23-46-30](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/a967717d-6d91-48bc-9ba2-ef0e47accc6c)
+
+
+**3)counters**
+
+<br />
+
+      \TLV
+         $reset = *reset;
+         
+         $cnt[1:0] = $reset ? (0) : (>>1$cnt[1:0] + 1) ;
+
+
+![Screenshot from 2023-10-16 23-49-43](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/bead905c-b7ac-4707-93c7-66079c4c5b66)
+
+## Representation of constant in verilog
+
+'0: All 0s (width based on context). 'X: All DONT-CARE bits. 16’d5: 16-bit decimal 5. 5'b00XX1: 5-bit value with DONT-CARE bits. 1: 32-bit (signed) 1.
+
+Our simulator configuration: 
+
+● will zero-extend or truncate when widths are mismatched (without warning) 
+
+● uses 2-state simulation (no X’s)
+
+**4)sequential calculator**
+
+
+<br />
+
+        \TLV
+           $reset = *reset;
+           
+           $val1[31:0] = >>1$out;
+           $val2[31:0] = $rand1[3:0];
+           $sum = $val1 + $val2;
+           $diff = $val1 - $val2;
+           $prod = $val1 * $val2;
+           $quot = $val1 / $val2;
+           
+           $out = $reset ? ( $op[1]?($op[0] ? $quot : $prod):($op[0] ? $diff : $sum) ) : 0;
+           // $out = op[1]?(op[0] ? $quot : $prod):(op[0] ? $diff : $sum);
+           
+           
+           // Assert these to end simulation (before Makerchip cycle limit).
+           *passed = *cyc_cnt > 40;
+           *failed = 1'b0;**
+
+
+
+   ![Screenshot from 2023-10-16 23-53-00](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/e318c12d-0d16-465c-8083-7c8d97873d51)
+
+
+
+    
+
 
 

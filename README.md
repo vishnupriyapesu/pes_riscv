@@ -248,7 +248,182 @@ Our simulator configuration:
 
 
 
+</details>
+
+<details>
+<summary>pipelined logic</summary>
+
+
+Pipeline Pythagoras's Theorem
+
+![Screenshot from 2023-10-17 21-59-52](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/d19169c2-6f14-44a4-b955-4378ac087ffb)
+
+
+
+<br />
+      `include "sqrt32.v";
+      |calc\
+            @1
+               $aa_sq[31:0] = $aa * $aa;
+               $bb_sq[31:0] = $bb * $bb;
+               
+            @2
+               $cc_sq[31:0] = $aa_sq + $bb_sq;
+            @3
+               $cc[31:0] = sqrt($cc_sq);
+
+
+![Screenshot from 2023-10-17 22-08-22](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/5f897348-3e49-4ba0-be96-13788941e78a)
+
+
+ **No impact no behavior:**
+
+<br />
+      `include "sqrt32.v";
+      |calc\
+            @1
+               $aa_sq[7:0] = $aa * $aa;
+               $bb_sq[7:0] = $bb * $bb;
+               
+            @2
+               $cc_sq[7:0] = $aa_sq + $bb_sq;
+            @3
+               $cc[7:0] = sqrt($cc_sq);
+
+
+
+![Screenshot from 2023-10-17 22-11-15](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/f2b8ebb6-77ae-4396-be96-bd56ab79b059)
+
+
+
+
+- Retiming changes in system verilog is very bug-prone, so it is easy to make these vhanges in tlverilog.
+
+
+
+- In makerchip waveform viewer the output will be captured according to the time, so if there are 3 stages in the logic then the output of the present inputs will be after two cycles.
+
+
+
+**pipeline logic advantage:**
+
+
+- In a non-pipelined system, a single operation may span multiple clock cycles, resulting in a relatively slow completion time. However, by introducing pipelining, the operation is divided into distinct stages, each executed in a single clock cycle. This architectural approach not only speeds up individual stages but also allows for concurrent execution of multiple stages. When pipelining is coupled with a higher clock frequency, it leads to a substantial reduction in the overall time required to finish an operation.
+
+
+
+- Pipelining enables the parallel execution of various stages within an operation. As each stage is designed to be completed swiftly, the entire operation can be processed more efficiently. This enhanced throughput, when combined with an increased clock frequency, results in the ability to handle a greater number of operations within the same unit of time**
+
+
+
+    **syntax of TLverilog**
+
+Type of an identifier determined by symbol prefix and case/delimitation style.
+
+Based on the first two letters of the variables:
+
+
+
+
+    - $lower_case: pipe signal
+
+    
+    - $CamelCase: state signal (technically, this is “Pascal case”)
+
+    
+    - UPPER_CASE: keyword signal
+
+    
+    - >>1 : Ahead by 1.
+
+
+
+**lab (pipeline)**
+
+
+<br />
+       \TLV
+          $reset = *reset;
+          
+          |comp
+             @1
+                $err1 = $bad_input | $illegal_op ;
+             @3 
+                $err2 = $overflow | $err1 ;
+             @6
+                $err3 = $err2 || $div_by_zero;
+          
+          
+          
+          
+          // Assert these to end simulation (before Makerchip cycle limit).
+          *passed = *cyc_cnt > 40;
+
+          *failed = 1'b0;
+       \SV
+          endmodule
+
     
 
+![Screenshot from 2023-10-17 22-24-35](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/83df1557-8ffa-45db-b4f4-07ac1455d2c4)
 
 
+
+**counter and calculator in pipeline:**
+
+
+<br />
+
+        \TLV
+           
+           |calc
+              @1
+                 $reset = *reset;
+                 $cnt[1:0] = $reset ? (0) : (>>1$cnt[1:0] + 1) ;
+                 
+                 $val1[31:0] = >>1$out;
+                 $val2[31:0] = $rand1[3:0];
+                 $sum = $val1 + $val2;
+                 $diff = $val1 - $val2;
+                 $prod = $val1 * $val2;
+                 $quot = $val1 / $val2;
+                 $out = $reset ? ( $op[1]?($op[0] ? $quot : $prod):($op[0] ? $diff : $sum) ) : 0;
+           
+           // $out = op[1]?(op[0] ? $quot : $prod):(op[0] ? $diff : $sum);
+
+![Screenshot from 2023-10-17 22-29-28](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/96789112-e280-4bae-9c8f-28dabc22e3cb)
+
+
+**2-cycle calculator**
+
+<br />
+      \TLV
+         
+         |calc
+            @1
+               $val1[31:0] = >>2$out;
+               $val2[31:0] = $rand1[3:0];
+               $sum[31:0] = $val1[31:0] + $val2[31:0];
+               $diff[31:0] = $val1[31:0] - $val2[31:0];
+               $prod[31:0] = $val1[31:0] * $val2[31:0];
+               $quot[31:0] = $val1[31:0] / $val2[31:0];
+               
+      
+            @2
+               $reset = *reset;
+               $valid = $reset ? (0) : (>>1$valid + 1) ;
+               $op[1:0] = $reset | $valid ;
+               $out[32:0] = $op[1] ? ($op[0] ? $quot[31:0] : $prod[31:0]) : ($op[0] ? $diff[31:0] : $sum[31:0]) ;
+         // $out = op[1]?(op[0] ? $quot : $prod):(op[0] ? $diff : $sum);
+         
+         
+         
+         // Assert these to end simulation (before Makerchip cycle limit).
+         *passed = *cyc_cnt > 40;
+         *failed = 1'b0;
+      
+
+![Screenshot from 2023-10-17 22-32-29](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/74dcaaf8-e0cb-49d4-badf-0fc580099338)
+
+
+ 

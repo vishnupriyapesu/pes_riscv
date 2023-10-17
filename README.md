@@ -385,6 +385,7 @@ Based on the first two letters of the variables:
                  $out = $reset ? ( $op[1]?($op[0] ? $quot : $prod):($op[0] ? $diff : $sum) ) : 0;
            
            // $out = op[1]?(op[0] ? $quot : $prod):(op[0] ? $diff : $sum);
+           
 
 ![Screenshot from 2023-10-17 22-29-28](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/96789112-e280-4bae-9c8f-28dabc22e3cb)
 
@@ -416,7 +417,8 @@ Based on the first two letters of the variables:
          // Assert these to end simulation (before Makerchip cycle limit).
          *passed = *cyc_cnt > 40;
          *failed = 1'b0;
-      
+
+
 
 ![Screenshot from 2023-10-17 22-32-29](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/74dcaaf8-e0cb-49d4-badf-0fc580099338)
 

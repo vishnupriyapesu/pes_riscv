@@ -329,7 +329,7 @@ Based on the first two letters of the variables:
     
 - UPPER_CASE: keyword signal
     
-- >>1 : Ahead by 1.
+- >> 1 : Ahead by 1.
 
 
 

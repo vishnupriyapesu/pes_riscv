@@ -323,15 +323,13 @@ Type of an identifier determined by symbol prefix and case/delimitation style.
 Based on the first two letters of the variables:
 
 
-
-
-    - $lower_case: pipe signa 
+- $lower_case: pipe signa 
     
-    - $CamelCase: state signal (technically, this is “Pascal case”)
+- $CamelCase: state signal (technically, this is “Pascal case”)
     
-    - UPPER_CASE: keyword signal
+- UPPER_CASE: keyword signal
     
-    - >>1 : Ahead by 1.
+- >>1 : Ahead by 1.
 
 
 

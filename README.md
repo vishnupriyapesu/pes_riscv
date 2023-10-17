@@ -325,14 +325,11 @@ Based on the first two letters of the variables:
 
 
 
-    - $lower_case: pipe signal
-
+    - $lower_case: pipe signa 
     
     - $CamelCase: state signal (technically, this is “Pascal case”)
-
     
     - UPPER_CASE: keyword signal
-
     
     - >>1 : Ahead by 1.
 

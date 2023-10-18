@@ -423,4 +423,28 @@ Based on the first two letters of the variables:
 ![Screenshot from 2023-10-17 22-32-29](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/74dcaaf8-e0cb-49d4-badf-0fc580099338)
 
 
+</details>
+
+
+
+<details>
+<summary>validity</summary>
+
+
+**Validity provides:**
+
+- Easier debug
+- Cleaner design
+- Better error checking
+- Automated clock gating
+
+
+**clock gating**
+
+- Used to save power while transferring clock.
+- Clock signals are distributed to EVERY flip-flop.
+- clocks toggle twice per cycle.
+- This consumes power.
+- Clock gating avoids toggling clock signals.
+
  

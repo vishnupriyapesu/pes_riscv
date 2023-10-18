@@ -425,8 +425,6 @@ Based on the first two letters of the variables:
 
 </details>
 
-
-
 <details>
 <summary>validity</summary>
 

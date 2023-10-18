@@ -447,4 +447,6 @@ Based on the first two letters of the variables:
 - This consumes power.
 - Clock gating avoids toggling clock signals.
 
+
+
  

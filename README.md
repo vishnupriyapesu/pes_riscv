@@ -446,5 +446,113 @@ Based on the first two letters of the variables:
 - Clock gating avoids toggling clock signals.
 
 
+**file structure in makerchip**
+
+- \m5_TLV_version 1d: tl-x.org :- Version of makerchip being used and tl-x.org contains tyhe documentation
+ - m5 :- Macro language used for processsing.
+ - m5_makerchip_module :- Expands the inputs and outputs in the NAV file.
+ - \sv :- The system verilog codes.
+ - \TLV :- Where tlverilog code is defined.
+
+
+**Distance Accumulator**
+
+![Screenshot from 2023-10-18 18-52-12](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/e1dfdf26-48be-4a72-8769-648513d53d30)
+
+<br />
+
+
+     \SV
+     `include "sqrt32.v";
+     
+     \TLV
+        $reset = *reset;
+        
+        |calc
+           @1
+              $reset = *reset ;
+           ?$valid
+              @1
+                 $aa_sq[31:0] = $aa * $aa;
+                 $bb_sq[31:0] = $bb * $bb;
+     
+              @2
+                 $cc_sq[31:0] = $aa_sq + $bb_sq;
+              @3
+                 $cc[31:0] = sqrt($cc_sq);
+           @4
+              $tot_dst = $reset ? 0 : ($valid ? >>1$tot_dst + $cc : >>1$tot_dst) ;
+
+
+![Screenshot from 2023-10-18 18-55-22](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/9cdbf1b0-4906-42e1-a44c-12576ddb7ecb)
+
+
+**cycle calculator with validity**
+
+$valid_or_reset = $valid || $reset; as a when condition for calculation instead of zeroing $out.
+
+
+<br />
+
+      \TLV
+         $reset = *reset;
+         |clac  
+            @1
+               $reset = *reset ;
+            ?$valid
+               @1
+                  
+                  $val1[31:0] = >>2$out[31:0];
+                  $sum = $val1 + $val2;
+                  $diff = $val1 - $val2;
+                  $prod = $val1 * $val2;
+                  $quot = $val1 / $val2;
+                  $valid = >>1$valid +1 ;
+                  $valid_or_reset = $valid || $reset;
+            @2
+               $out[31:0] = $valid_or_reset ? ($op[1]?($op[0] ? $quot : $prod) : ($op[0] ? $diff : $sum) ) : 0 ;
+
+
+![Screenshot from 2023-10-18 19-11-01](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/429fb532-0287-4bd0-bfcd-64a83c47e7be)
+
+
+        
+
+</details>
+
+
+# Day-4 Basic RISC-V CPU micro architecture
+
+
+<details>
+<summary>intoduction to simple RISC-V miceo architecture</summary>
+
+**RISC-V block diagram**
+
+![Screenshot from 2023-10-19 09-20-03](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/4758a11c-1e9e-4c8b-bab8-80d1e361c4b9)
+
+ 1) Instruction Fetch (IF):
+The processor fetches the instruction from memory. The program counter (PC) is used to determine the address of the next instruction in memory.
+The instruction is loaded into the instruction register (IR) for decoding.
+
+2) Instruction Decode (ID):
+The processor decodes the instruction in the instruction register.
+The opcode (operation code) is identified, and the necessary control signals are generated based on the opcode.
+
+3) Execute (EX):
+The processor performs the operation specified by the instruction.
+For arithmetic and logical operations, the ALU (Arithmetic Logic Unit) performs the computation.
+Memory addresses are calculated for load and store instructions.
+
+4) Memory Access (MEM):
+If the instruction involves accessing memory (such as a load or store operation), the memory address is sent to the memory unit.
+For a load operation, data is read from memory and stored in a register.
+For a store operation, data from a register is written to the memory location.
+
+5) Write Back (WB):
+The result of the instruction is written back to the destination register.
+For instructions that produce a result (such as arithmetic or logical operations), the result is stored in the specified register.
+
+  
 
  

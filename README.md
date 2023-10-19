@@ -553,6 +553,103 @@ For a store operation, data from a register is written to the memory location.
 The result of the instruction is written back to the destination register.
 For instructions that produce a result (such as arithmetic or logical operations), the result is stored in the specified register.
 
-  
+**implementation**
 
- 
+
+![Screenshot from 2023-10-19 09-25-52](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/b2ea5415-5793-4f63-9ac5-9543019beaab)
+
+ ![Screenshot from 2023-10-19 09-33-07](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/c2adf2ff-7f37-4adb-ba67-4b9112099ec3)
+
+![Screenshot from 2023-10-19 09-33-50](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/3a01ca7c-9624-40ba-ab60-33b6578180a5)
+
+
+</details>
+
+
+
+<details>
+<summary>instruction fetch</summary>
+
+ **Instruction Fetch (IF):**
+The processor fetches the instruction from memory. The program counter (PC) is used to determine the address of the next instruction in memory.
+The instruction is loaded into the instruction register (IR) for decoding.
+<br />
+
+
+     \TLV
+        $reset = *reset;
+        
+        $pc_out[31:0] = >>1$reset ? (0) : (>>1$pc_prev[31:0] + 32'h4) ;
+
+![Screenshot from 2023-10-19 09-40-05](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/0637a08a-1ca4-4476-a7c4-4013de2b41a2)
+
+
+<br />
+
+       
+       \TLV
+          // External to function:
+          m4_asm(ADD, r10, r0, r0)             // Initialize r10 (a0) to 0.
+          // Function:
+          m4_asm(ADD, r14, r10, r0)            // Initialize sum register a4 with 0x0
+          m4_asm(ADDI, r12, r10, 1010)         // Store count of 10 in register a2.
+          m4_asm(ADD, r13, r10, r0)            // Initialize intermediate sum register a3 with 0
+          // Loop:
+          m4_asm(ADD, r14, r13, r14)           // Incremental addition
+          m4_asm(ADDI, r13, r13, 1)            // Increment intermediate register by 1
+          m4_asm(BLT, r13, r12, 1111111111000) // If a3 is less than a2, branch to label named <loop>
+          m4_asm(ADD, r10, r14, r0)            // Store final result to register a0 so that it can be read by main program
+          
+          // Optional:
+          // m4_asm(JAL, r7, 00000000000000000000) // Done. Jump to itself (infinite loop). (Up to 20-bit signed immediate plus implicit 0 bit (unlike JALR) provides byte address; last immediate bit should also be 0)
+          m4_define_hier(['M4_IMEM'], M4_NUM_INSTRS)
+       
+          |cpu
+             @0
+                $reset = *reset;
+                
+                $pc[31:0] = >>1$reset ? (0) : (>>1$pc[31:0] + 32'd4) ;
+             @1
+                $imm_rd_en = !$reset;
+                $imm_rd_addr[M4_IMEM_INDEX_CNT-1:0] = $pc[M4_IMEM_INDEX_CNT+1:2];
+                $instr[31:0] = $imem_rd_data[31:0];
+                
+          
+          // Assert these to end simulation (before Makerchip cycle limit).
+          *passed = *cyc_cnt > 40;
+          *failed = 1'b0;
+       
+          |cpu
+             m4+imem(@1)    // Args: (read stage)
+             //m4+rf(@1, @1)  // Args: (read stage, write stage) - if equal, no register bypass is required
+             //m4+dmem(@4)    // Args: (read/write stage)
+             m4+myth_fpga(@0)  // Uncomment to run on fpga
+       
+          m4+cpu_viz(@4)    // For visualisation
+
+![Screenshot from 2023-10-19 09-46-07](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/125bef5d-1a54-4381-ace3-d253bc8b93ce)
+
+
+
+</details>
+
+<details>
+<summary>decoding</summary>
+
+**Instruction Decode (ID):**
+The processor decodes the instruction in the instruction register.
+The opcode (operation code) is identified, and the necessary control signals are generated based on the opcode.
+
+
+- Below image shows hoe decode is determining the TYPE OF RISC V instructions set (Various types of Instructions in RV32 are I, R, S, J, U)
+
+
+![Screenshot from 2023-10-19 09-47-07](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/8300c71b-3675-4c61-a4fa-118b89901972)
+
+
+
+**instruction types in decoding stage**
+
+
+![Screenshot from 2023-10-19 09-50-19](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/10640dae-33e6-4e64-9e16-0ae4ab24f73d)
+

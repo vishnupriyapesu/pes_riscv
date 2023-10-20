@@ -684,5 +684,17 @@ The opcode (operation code) is identified, and the necessary control signals are
 
 ![Screenshot from 2023-10-20 09-48-40](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/76c8acc8-40f3-4004-a1bc-c4d2dc027bb8)
 
+
+<br />
+         $imm[31:0] = $is_i_instr ? { {21{$instr[31]}}, $instr[30:20] } 
+                                  : $is_s_instr ? {{21{$instr[31]}}, $instr[30:25],$instr[11:7]} 
+                                  : $is_b_instr ? { {19{$instr[31]}} , $inst[7] , $instr[30:25] , $instr[11:8] ,1'b0}
+                                  : $is_u_instr ? { $instr[31] , $instr[30:12], 12'b0 }
+                                  : { {12{$instr[31]}} , $instr[20], $instr[30:25], $instr[24:21] ,1'b0 };
+
+
+ ![Screenshot from 2023-10-20 09-53-41](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/3dfa0043-efd3-4bd8-b5e5-de7b56f96471)
+
   
+![Screenshot from 2023-10-20 09-55-02](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/df040ddd-b75a-48ae-9edf-0a11e17a36c0)
 

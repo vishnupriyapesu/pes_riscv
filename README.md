@@ -653,3 +653,36 @@ The opcode (operation code) is identified, and the necessary control signals are
 
 ![Screenshot from 2023-10-19 09-50-19](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/10640dae-33e6-4e64-9e16-0ae4ab24f73d)
 
+
+
+<br />
+
+       @1 
+                //$pc[31:0] = >>1$reset ? 32'b0 : >>1$taken_br ? >>1$br_tgt_pc : >>1$pc + 32'd4;
+                $imem_rd_en = !$reset;
+                $instr[31:0] = $imem_rd_data[31:0];
+                //$instr[31:0] =  $imem_rd_en ? 32'b0 : >>1$imem_rd_data[$imem_rd_addr];
+                $imem_rd_addr[3-1:0] = $pc[3+1:2];
+                
+                $is_i_instr = $instr[6:2] ==? 5'b0000x ||
+                              $instr[6:2] ==? 5'b001x0 ||
+                              $instr[6:2] ==? 5'bxx001;
+                $is_s_instr = $instr[6:2] ==? 5'b0100x;
+                $is_r_instr = $instr[6:2] ==? 5'b01xxx ||
+                              $instr[6:2] ==? 5'b011x0 ||
+                              $instr[6:2] ==? 5'bxx100;
+                $is_u_instr = $instr[6:2] ==? 5'b0x101;
+                $is_b_instr = $instr[6:2] ==? 5'b11000;
+                $is_j_instr = $instr[6:2] ==? 5'b11011;
+
+
+
+  ![Screenshot from 2023-10-20 09-46-48](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/eba3ab6d-b853-4ffe-a70b-7a5f30c8cb50)
+
+
+  **instructions**
+
+![Screenshot from 2023-10-20 09-48-40](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/76c8acc8-40f3-4004-a1bc-c4d2dc027bb8)
+
+  
+

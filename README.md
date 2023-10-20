@@ -698,3 +698,7 @@ The opcode (operation code) is identified, and the necessary control signals are
   
 ![Screenshot from 2023-10-20 09-55-02](https://github.com/vishnupriyapesu/pes_riscv/assets/142419649/df040ddd-b75a-48ae-9edf-0a11e17a36c0)
 
+
+
+
+
